@@ -8,3 +8,38 @@ zp = [35, 45, 190, 200, 40, 70, 54, 150, 120, 110], ks = [401, 574, 874, 919, 45
 Найдите коэффициент корреляции Пирсона с помощью  ковариации и среднеквадратичных отклонений двух признаков, 
 а затем с использованием функций из библиотек numpy и pandas.
 """
+
+import numpy as np
+import pandas as pd
+
+# Исходные данные
+zp = [35, 45, 190, 200, 40, 70, 54, 150, 120, 110]
+ks = [401, 574, 874, 919, 459, 739, 653, 902, 746, 832]
+
+# Расчет ковариации вручную
+mean_zp = sum(zp) / len(zp)
+mean_ks = sum(ks) / len(ks)
+
+cov_zp_ks = sum((zp[i] - mean_zp) * (ks[i] - mean_ks) for i in range(len(zp))) / len(zp)
+print(f'Ковариация между zp и ks вручную: {cov_zp_ks}')
+
+# Расчет ковариации с помощью numpy
+cov_matrix = np.cov(zp, ks, ddof=0)
+print(f'Ковариация между zp и ks с помощью numpy: {cov_matrix[0, 1]}')
+
+# Расчет стандартных отклонений
+std_zp = (sum((i - mean_zp) ** 2 for i in zp) / len(zp)) ** 0.5
+std_ks = (sum((i - mean_ks) ** 2 for i in ks) / len(ks)) ** 0.5
+
+# Расчет коэффициента корреляции Пирсона вручную
+corr_zp_ks = cov_zp_ks / (std_zp * std_ks)
+print(f'Коэффициент корреляции Пирсона вручную: {corr_zp_ks}')
+
+# Расчет коэффициента корреляции с помощью numpy
+corr_zp_ks_numpy = np.corrcoef(zp, ks)[0, 1]
+print(f'Коэффициент корреляции Пирсона с помощью numpy: {corr_zp_ks_numpy}')
+
+# Расчет коэффициента корреляции с помощью pandas
+df = pd.DataFrame({'zp': zp, 'ks': ks})
+corr_zp_ks_pandas = df.corr().iloc[0, 1]
+print(f'Коэффициент корреляции Пирсона с помощью pandas: {corr_zp_ks_pandas}')
